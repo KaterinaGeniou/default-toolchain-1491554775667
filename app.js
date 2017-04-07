@@ -11,6 +11,30 @@ var appEnv = cfenv.getAppEnv();
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
+var Client = require("ibmiotf");
+var appClientConfig = {
+    "org" : "2fbcv2",
+    "id" : "ovo1xo",
+    "domain": "internetofthings.ibmcloud.com",
+    "auth-key" : "a-2fbcv2-opgagk3i5t",
+    "auth-token" : "OsfFOUQS+3Zk_a+vm7"
+}
+
+var appClient = new Client.IotfApplication(appClientConfig);
+
+appClient.connect();
+
+appClient.on("connect", function () {
+
+    appClient.subscribeToDeviceEvents("myDeviceType","device01","+","json");
+
+});
+appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, payload) {
+
+    console.log("Device Event from :: "+deviceType+" : "+deviceId+" of event "+eventType+" with payload : "+payload);
+
+});
+
 var config = null;
 var credentials = null;
 if (process.env.VCAP_SERVICES) {
